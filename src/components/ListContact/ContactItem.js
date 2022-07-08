@@ -1,17 +1,17 @@
-const ContactItem = (props) => {
+const ContactItem = ({ id, index, name, phone, email, date, onEdit, onDelete }) => {
   const onDeleteHandler = () => {
-   props.onDelete(props.id);
+    onDelete(id);
   };
   const onEditHandler = () => {
-   props.onEdit(props);
+    onEdit({ id, index, name, phone, email, date });
   };
   return (
     <tr>
-      <th>{props.index}</th>
-      <td>{props.name} </td>
-      <td>{props.phone}</td>
-      <td>{props.email}</td>
-      <td>{props.date}</td>
+      <th>{index}</th>
+      <td>{name} </td>
+      <td>{phone}</td>
+      <td>{email}</td>
+      <td>{date}</td>
       <td>
         <button onClick={onEditHandler} className="btn btn-success" type="button">
           Edit

@@ -1,6 +1,7 @@
 import "./App.css";
 import NewContact from "./components/NewContact/NewContact";
 import ListContact from "./components/ListContact/ListContact";
+import { getDataObjectFromStorage, updateLocalStorage } from "./utils";
 import React, { useState } from "react";
 
 function App() {
@@ -10,42 +11,34 @@ function App() {
     phone: "",
     email: "",
   }
-  const getDataObjectFromStorage = () => {
-    let inputObjectString = localStorage.getItem("contactsInfo");
-    if (inputObjectString == null) {
-      inputObjectString = "[]";
-    }
 
-    return JSON.parse(inputObjectString);
-  };
   const [contacts, setContacts] = useState(getDataObjectFromStorage());
   const [editContact, setEditContacts] = useState(INIT_CONTACT);
   const onNewContactHandler = (contact) => {
     setContacts((prevContact) => {
-      const newContact = [contact, ...prevContact];
-      localStorage.setItem("contactsInfo", JSON.stringify(newContact));
+      const newContact = [...prevContact, contact];
+      updateLocalStorage(newContact);
       return newContact;
     });
   };
-  const onEditContactHandler = (inputData) => {
+  const onEditContactHandler = (editContact) => {
     setEditContacts(INIT_CONTACT);
     let contactsUpdated = contacts.map((contact) => {
-      if (contact.id === inputData.id) {
-        return inputData;
+      if (contact.id === editContact.id) {
+        return editContact;
       }
 
       return contact;
     });
     setContacts(contactsUpdated);
-    localStorage.setItem("contactsInfo", JSON.stringify(contactsUpdated));
+    updateLocalStorage(contactsUpdated);
   };
   const onDeleteHandler = (id) => {
-    console.log(id);
     let contactsAfterRemove = contacts.filter((contact) => {
       return contact.id !== id;
     });
     setContacts(contactsAfterRemove);
-    localStorage.setItem("contactsInfo", JSON.stringify(contactsAfterRemove));
+    updateLocalStorage(contactsAfterRemove);
   };
 
   const onEditHandler = (contact) => {
@@ -55,7 +48,7 @@ function App() {
     <div className="container">
       <NewContact
         editContact={editContact}
-        onEditContactHandler={onEditContactHandler}
+        onEditContact={onEditContactHandler}
         onSaveNewContact={onNewContactHandler}
       />
       <ListContact

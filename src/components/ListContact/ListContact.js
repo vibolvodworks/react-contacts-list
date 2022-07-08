@@ -1,6 +1,6 @@
 import ContactItem from "./ContactItem";
 
-const ListContact = (props) => {
+const ListContact = ({ onEdit, onDelete, contactDatas = [] }) => {
   return (
     <div className="row">
       <div className="col-12">
@@ -16,11 +16,11 @@ const ListContact = (props) => {
             </tr>
           </thead>
           <tbody>
-            {props.contactDatas.map((contact, index) => {
+            {contactDatas.map((contact, index) => {
               return (
                 <ContactItem
-                  onEdit={props.onEdit}
-                  onDelete={props.onDelete}
+                  onEdit={onEdit}
+                  onDelete={onDelete}
                   index={index + 1}
                   id={contact.id}
                   key={contact.id}

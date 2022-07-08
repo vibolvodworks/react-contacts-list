@@ -1,8 +1,11 @@
 import "./NewContactForm.css";
 import React, { useRef, useState } from "react";
 import FormError from "./FormError";
+import { IsEmailValid, IsPhoneValid } from "../../utils/validator";
 
-const NewContactForm = (props) => {
+const NewContactForm = ({
+  id, name, phone, email, onEditContact, onSaveContact
+}) => {
   const [errors, setErrors] = useState({
     name: "",
     phone: "",
@@ -12,11 +15,11 @@ const NewContactForm = (props) => {
   const emailInputRef = useRef();
   const phoneInputRef = useRef();
   if (nameInputRef.current) {
-    nameInputRef.current.value = props.name;
-    phoneInputRef.current.value = props.phone;
-    emailInputRef.current.value = props.email;
+    nameInputRef.current.value = name;
+    phoneInputRef.current.value = phone;
+    emailInputRef.current.value = email;
   }
-  const isEdit = props.id != null;
+  const isEdit = id != null;
   const onSubmitHandler = (event) => {
     let name = nameInputRef.current.value;
     let phone = phoneInputRef.current.value;
@@ -30,14 +33,13 @@ const NewContactForm = (props) => {
         date: new Date().toLocaleString("en-GB"),
       };
       if (isEdit) {
-        contact.id = props.id;
-        props.onEditContact(contact);
+        contact.id = id;
+        onEditContact(contact);
       } else {
-        props.onSaveContact(contact);
+        onSaveContact(contact);
       }
-      return true;
     }
-    return false;
+    event.preventDefault();
   };
 
   const FormValidation = (name, phone, email) => {
@@ -71,19 +73,7 @@ const NewContactForm = (props) => {
       nameMsg.length === 0 && phoneMsg.length === 0 && emailMsg.length === 0
     );
   };
-  const IsEmailValid = (email) => {
-    const req =
-      /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
 
-    return email.match(req);
-  };
-
-  const IsPhoneValid = (phone) => {
-    const re =
-      /^[(]{0,1}[0-9]{3}[)]{0,1}[-\s\.]{0,1}[0-9]{3}[-\s\.]{0,1}[0-9]{4}$/;
-
-    return re.test(phone);
-  };
   return (
     <form
       onSubmit={onSubmitHandler}

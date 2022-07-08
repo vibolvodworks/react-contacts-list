@@ -1,21 +1,21 @@
 import NewContactForm from "./NewContactForm";
 
-const NewContact = (props) => {
+const NewContact = ({ editContact, onEditContact, onSaveNewContact }) => {
   const onSaveContactHandler = (contact) => {
-    props.onSaveNewContact(contact);
+    onSaveNewContact(contact);
   };
   const onEditContactHandler = (contact) => {
-    props.onEditContactHandler(contact);
+    onEditContact(contact);
   };
   return (
     <div className="row">
       <div className="col-3"></div>
       <div className="col-6">
         <NewContactForm
-          id={props.editContact.id}
-          name={props.editContact.name}
-          email={props.editContact.email}
-          phone={props.editContact.phone}
+          id={editContact.id}
+          name={editContact.name}
+          email={editContact.email}
+          phone={editContact.phone}
           onEditContact={onEditContactHandler}
           onSaveContact={onSaveContactHandler}
         />
